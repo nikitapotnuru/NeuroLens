@@ -3,7 +3,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import { Activity, ShieldAlert, HeartHandshake } from 'lucide-react';
 
 // Import Pages
-import LandingPage from './pages/Landingpage';
+import LandingPage from './pages/LandingPage';
 import RegistrationPage from './pages/RegistrationPage';
 import SetupPage from './pages/SetupPage';
 import DashboardPage from './pages/DashboardPage';
