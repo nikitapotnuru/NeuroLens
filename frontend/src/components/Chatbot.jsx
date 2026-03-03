@@ -1,16 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
+import { MessageCircle, X, Send, Bot } from 'lucide-react';
 
 export default function Chatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { sender: 'ai', text: "Hi! I'm your NeuroLens Assistant. I can explain screening parameters, guide you through the process, or answer general questions. How can I help?" }
   ]);
-  const[input, setInput] = useState('');
+  const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Auto-scroll to bottom of chat
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
@@ -19,19 +18,17 @@ export default function Chatbot() {
     const userText = text || input;
     if (!userText.trim()) return;
 
-    // Add user message
     setMessages(prev => [...prev, { sender: 'user', text: userText }]);
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI thinking and responding (In production, this calls your Python/LLM backend)
     setTimeout(() => {
-      let aiResponse = "I'm here to support you! Remember, NeuroLens is an early screening tool, not a medical diagnostic system.";
+      let aiResponse = "I'm here to support you! Remember, NeuroLens ASD Screening Tool is an early screening aid, not a medical diagnosis.";
       
       if (userText.toLowerCase().includes("eye tracking")) {
-        aiResponse = "Eye tracking measures how accurately your child follows a moving light. Typical development often shows smooth tracking, while hesitations can be early markers we gently note.";
+        aiResponse = "Eye tracking measures how accurately your child follows a moving light. Typical development often shows smooth tracking, while hesitations can be early markers.";
       } else if (userText.toLowerCase().includes("next step") || userText.toLowerCase().includes("moderate")) {
-        aiResponse = "If your screening indicates a moderate risk, don't panic. This just means we noticed some behavioral markers. We highly recommend downloading the PDF report and sharing it with your pediatrician.";
+        aiResponse = "If your screening indicates a moderate risk or 50% alignment, don't panic. We highly recommend downloading the PDF report and sharing it with your pediatrician.";
       }
 
       setMessages(prev =>[...prev, { sender: 'ai', text: aiResponse }]);
@@ -40,11 +37,22 @@ export default function Chatbot() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
+    // Changed to top-20 and flex-col items-end so it aligns perfectly to the top right
+    <div className="fixed top-20 right-6 z-50 font-sans flex flex-col items-end">
       
-      {/* The Chat Window */}
+      {/* The Floating Bubble Button */}
+      {!isOpen && (
+        <button 
+          onClick={() => setIsOpen(true)}
+          className="bg-nl-primaryTeal text-white p-4 rounded-full shadow-2xl hover:bg-teal-600 hover:scale-110 transition-all duration-300 flex items-center justify-center animate-bounce mb-4"
+        >
+          <MessageCircle className="w-7 h-7" />
+        </button>
+      )}
+
+      {/* The Chat Window (Now drops down) */}
       {isOpen && (
-        <div className="bg-white w-80 sm:w-96 rounded-[2rem] shadow-2xl border border-gray-100 mb-4 overflow-hidden flex flex-col h-[500px] animate-fade-in-up">
+        <div className="bg-white w-80 sm:w-96 rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[500px] animate-fade-in-down origin-top-right">
           
           {/* Header */}
           <div className="bg-nl-primaryTeal text-white p-4 flex items-center justify-between shadow-sm">
@@ -62,17 +70,16 @@ export default function Chatbot() {
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
                 {msg.sender === 'ai' && <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 shrink-0"><Bot className="w-5 h-5"/></div>}
-                <div className={`p-3 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.sender === 'user' ? 'bg-blue-500 text-white rounded-br-none' : 'bg-white text-gray-700 rounded-bl-none border border-gray-100'}`}>
+                <div className={`p-3 rounded-2xl max-w-[80%] text-sm leading-relaxed shadow-sm ${msg.sender === 'user' ? 'bg-blue-500 text-white rounded-tr-none' : 'bg-white text-gray-700 rounded-tl-none border border-gray-100'}`}>
                   {msg.text}
                 </div>
               </div>
             ))}
             
-            {/* Typing Indicator */}
             {isTyping && (
               <div className="flex gap-3 justify-start">
                 <div className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 shrink-0"><Bot className="w-5 h-5"/></div>
-                <div className="p-4 rounded-2xl bg-white text-gray-700 rounded-bl-none border border-gray-100 flex gap-1 items-center shadow-sm">
+                <div className="p-4 rounded-2xl bg-white text-gray-700 rounded-tl-none border border-gray-100 flex gap-1 items-center shadow-sm">
                   <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce"></div>
                   <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce delay-75"></div>
                   <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce delay-150"></div>
@@ -83,7 +90,7 @@ export default function Chatbot() {
           </div>
 
           {/* Quick Prompts */}
-          <div className="px-4 pb-2 bg-white flex gap-2 overflow-x-auto custom-scrollbar">
+          <div className="px-4 pb-2 bg-white flex gap-2 overflow-x-auto custom-scrollbar pt-2">
             <button onClick={() => handleSend("What is eye tracking?")} className="whitespace-nowrap bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-teal-100 transition-colors border border-teal-100">
               What is eye tracking?
             </button>
@@ -108,16 +115,6 @@ export default function Chatbot() {
           </div>
 
         </div>
-      )}
-
-      {/* The Floating Bubble Button */}
-      {!isOpen && (
-        <button 
-          onClick={() => setIsOpen(true)}
-          className="bg-nl-primaryTeal text-white p-4 rounded-full shadow-2xl hover:bg-teal-600 hover:scale-110 transition-all duration-300 flex items-center justify-center animate-bounce"
-        >
-          <MessageCircle className="w-8 h-8" />
-        </button>
       )}
     </div>
   );
