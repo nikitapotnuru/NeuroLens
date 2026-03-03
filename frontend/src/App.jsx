@@ -12,25 +12,33 @@ import Chatbot from './components/Chatbot';
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col w-full">
+    <div className="min-h-screen flex flex-col w-full font-sans">
+      
       {/* 🟢 NAVIGATION BAR */}
       <header className="bg-white shadow-sm sticky top-0 z-40 print:hidden w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 text-nl-primaryTeal font-extrabold text-2xl">
+          
+          {/* LEFT SIDE: Application Name */}
+          <Link to="/" className="flex items-center gap-3 text-nl-primaryTeal font-extrabold text-xl md:text-2xl shrink-0">
             <Activity className="w-8 h-8" />
-            <span>NeuroLens ASD Screening Tool</span>
+            <span className="whitespace-nowrap">NeuroLens ASD Screening Tool</span>
           </Link>
-          <nav className="hidden md:flex gap-6 font-semibold text-nl-darkText">
-            <Link to="/" className="hover:text-nl-primaryTeal transition-colors">Home</Link>
-            <Link to="/history" className="hover:text-nl-primaryTeal transition-colors">History</Link>
-          </nav>
-          <Link to="/register" className="bg-nl-primaryTeal text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-teal-600 transition-all">
-            Start Screening
-          </Link>
+          
+          {/* RIGHT SIDE: Navigation & Button (Grouped to prevent text bleeding) */}
+          <div className="flex items-center gap-4 md:gap-8">
+            <nav className="hidden md:flex gap-6 font-semibold text-nl-darkText">
+              <Link to="/" className="hover:text-nl-primaryTeal transition-colors">Home</Link>
+              <Link to="/history" className="hover:text-nl-primaryTeal transition-colors">History</Link>
+            </nav>
+            <Link to="/register" className="hidden sm:inline-block bg-nl-primaryTeal text-white px-6 py-2.5 rounded-full font-bold shadow-md hover:bg-teal-600 transition-all whitespace-nowrap">
+              Start Screening
+            </Link>
+          </div>
+
         </div>
       </header>
 
-      {/* 🟢 MAIN CONTENT AREA (Centered) */}
+      {/* 🟢 MAIN CONTENT AREA */}
       <main className="flex-grow flex flex-col items-center w-full">
         <Routes>
           <Route path="/" element={<LandingPage />} />
@@ -56,7 +64,7 @@ function App() {
         </div>
       </footer>
 
-      {/* 🟢 THE GLOBAL CHATBOT WIDGET */}
+      {/* 🟢 GLOBAL CHATBOT WIDGET */}
       <div className="print:hidden">
         <Chatbot />
       </div>
