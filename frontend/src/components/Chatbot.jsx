@@ -37,24 +37,23 @@ export default function Chatbot() {
   };
 
   return (
-    // Changed to top-20 and flex-col items-end so it aligns perfectly to the top right
-    <div className="fixed top-20 right-6 z-50 font-sans flex flex-col items-end">
+    // Pinned to Top Right, high Z-index to float above everything
+    <div className="fixed top-24 right-8 z-[9999] font-sans flex flex-col items-end">
       
       {/* The Floating Bubble Button */}
       {!isOpen && (
         <button 
           onClick={() => setIsOpen(true)}
-          className="bg-nl-primaryTeal text-white p-4 rounded-full shadow-2xl hover:bg-teal-600 hover:scale-110 transition-all duration-300 flex items-center justify-center animate-bounce mb-4"
+          className="bg-nl-primaryTeal text-white w-14 h-14 rounded-full shadow-xl hover:bg-teal-600 hover:scale-110 transition-all duration-300 flex items-center justify-center animate-bounce mb-4"
         >
           <MessageCircle className="w-7 h-7" />
         </button>
       )}
 
-      {/* The Chat Window (Now drops down) */}
+      {/* The Chat Window (Drops down from the top right) */}
       {isOpen && (
         <div className="bg-white w-80 sm:w-96 rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden flex flex-col h-[500px] animate-fade-in-down origin-top-right">
           
-          {/* Header */}
           <div className="bg-nl-primaryTeal text-white p-4 flex items-center justify-between shadow-sm">
             <div className="flex items-center gap-2">
               <Bot className="w-6 h-6" />
@@ -65,7 +64,6 @@ export default function Chatbot() {
             </button>
           </div>
 
-          {/* Chat Area */}
           <div className="flex-grow p-4 overflow-y-auto bg-gray-50 flex flex-col gap-4">
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -89,7 +87,6 @@ export default function Chatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Quick Prompts */}
           <div className="px-4 pb-2 bg-white flex gap-2 overflow-x-auto custom-scrollbar pt-2">
             <button onClick={() => handleSend("What is eye tracking?")} className="whitespace-nowrap bg-teal-50 text-teal-700 text-xs font-bold px-3 py-1.5 rounded-full hover:bg-teal-100 transition-colors border border-teal-100">
               What is eye tracking?
@@ -99,7 +96,6 @@ export default function Chatbot() {
             </button>
           </div>
 
-          {/* Input Area */}
           <div className="p-4 bg-white border-t border-gray-100 flex items-center gap-2">
             <input 
               type="text" 
